@@ -1,0 +1,69 @@
+<!doctype html>
+<html class="no-js fixed-layout" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml">
+<head th:include="include/admin/header::html"></head>
+<body>
+
+    <!--引入共有头部-->
+    <div th:replace="include/top::header"></div>
+
+    <!--页面主体内容-->
+    <div class="am-cf admin-main" style="padding-top: 0">
+
+        <!--引入共有左侧-->
+        <div th:replace="include/admin/left::html"></div>
+
+        <!--右侧-->
+        <div class="admin-content" id="app">
+            <div class="superAdminInfo">
+                <div class="superFunction" id="articleManagement">
+                    <div class="subject">
+                        <div class="articles">
+                            <div class="am-g">
+                                <div class="am-u-sm-12 " style="padding-left: 0;">
+                                    <ol class="am-breadcrumb  am-breadcrumb-slash">
+                                        <li class="am-active am-icon-home"> 后台管理</li>
+                                        <li class="am-active">文章管理</li>
+                                    </ol>
+                                    <a href="/admin_write_article"><div class="write-blog"><span class="am-icon-plus"></span> 写博客</div></a>
+                                    <div class="articleManagementTable">
+                                        <table class="table am-table am-table-bd am-table-striped admin-content-table  am-animation-slide-right">
+                                            <thead>
+                                            <tr>
+                                                <th>文章标题</th><th>发布时间</th><th>文章分类</th><th>喜欢数</th><th>浏览量</th><th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="tables">
+                                                <tr id="" v-for="a in beans">
+                                                    <td><a :href="'/article?aid='+a.id" target="_blank">{{a.title}}</a></td>
+                                                    <td>{{a.publishDate | formatDateTimeFilter}}</td>
+                                                    <td><a :href="'/categories?cid='+a.category.id+'&name='+a.category.name+'&start=0'" target="_blank">{{a.category.name}}</a></td>
+                                                    <td>{{a.likes}}</td>
+                                                    <td>{{articles_read_count[a.id]}}</td>
+                                                    <td>
+                                                        <div class="am-dropdown" data-am-dropdown>
+                                                            <a :href="'/admin_edit_article?id=' + a.id"><button class="articleManagementBtn articleEditor am-btn am-btn-secondary">编辑</button></a>
+                                                            <a href="#nowhere"  @click="deleteBean(a.id)"><button class="articleDeleteBtn articleDelete am-btn am-btn-danger">删除</button></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div th:replace="include/page::html" ></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--引入共有脚部-->
+            <div th:replace="include/admin/footer::html"></div>
+        </div>
+    </div>
+
+<script src="js/all.js"></script>
+<script src="js/plugs_paging.js"></script>
+<script src="js/admin/admin_article.js"></script>
+</body>
+</html>

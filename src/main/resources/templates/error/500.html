@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="include/fore/header::html"></head>
+<body>
+<div th:replace="include/fore/top::html"></div>
+<div id="app">
+    <div class="error">
+        <img src="/img/500.png">
+        <p class="tips">页面君出错了，尽力修补中...</p>
+        <a href="/index">
+            <p class="button">返回主页</p>
+        </a>
+    </div>
+    <!--引入共有底部-->
+    <div th:replace="include/footer::footer"></div>
+</div>
+<script src="js/all.js"></script>
+<script>
+    var data4Vue = {
+        item: ''
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body>
+</html>

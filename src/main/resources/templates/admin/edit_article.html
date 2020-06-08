@@ -1,0 +1,292 @@
+<!doctype html>
+<html class="no-js fixed-layout" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml">
+<head th:include="include/admin/header::html"></head>
+<body>
+
+<!--引入共有头部-->
+<div th:replace="include/top::header"></div>
+
+<!--页面主体内容-->
+<div class="am-cf admin-main" style="padding-top: 0">
+
+    <!--引入共有左侧-->
+    <div th:replace="include/admin/left::html"></div>
+
+    <!--右侧-->
+    <div class="admin-content" id="workingArea">
+        <div class="superAdminInfo">
+            <div class="superFunction" id="statistics">
+                <div class="subject">
+                    <ol class="am-breadcrumb  am-breadcrumb-slash">
+                        <li class="am-active am-icon-home"> 后台管理</li>
+                        <li class="am-active">编辑博客</li>
+                    </ol>
+                    <!--发布博客表单-->
+                    <div th:replace="include/alert::html"></div>
+                    <form class="am-form am-form-horizontal" >
+                        <div class="am-form-group pub-blog-form">
+                            <label for="doc-ipt-3" class="col-sm-2 am-form-label">博客标题</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="doc-ipt-3" @keyup.enter="update" v-model.trim="article.title">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group pub-blog-form">
+                            <label class="col-sm-2 am-form-label">原作者</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="doc-ipt-4" @keyup.enter="update" v-model.trim="article.originalAuthor">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group pub-blog-form">
+                            <label class="col-sm-2 am-form-label">原链接</label>
+                            <div class="col-sm-10">
+                                <input type="text" @keyup.enter="update" v-model.trim="article.originalUrl">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group pub-blog-form">
+                            <label class="col-sm-2 am-form-label">博客类型</label>
+                            <select v-model.trim="article.type">
+                                <option value="原创">原创</option>
+                                <option value="转载">转载</option>
+                            </select>
+                        </div>
+
+                        <div class="am-form-group am-form-select pub-blog-form">
+                            <label class="col-sm-2 am-form-label">博客分类</label>
+                            <select v-model.trim="article.category.id">
+                                <option :value="c.id" v-for="c in categories">{{c.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="am-form-group pub-blog-form" style="margin-top: 25px;">
+                            <label>博客标签</label>
+                            <select multiple v-model.trim="article.tagsId">
+                                <option :value="t.id" v-for="t in tags">{{t.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="am-form-group" style="width: 900px; margin-top: 25px;">
+                            <label>博客内容</label>
+                            <div id="toolbar-container"></div>
+                            <div id="editor"></div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="am-btn am-btn-default" @click.prevent="update">修改博客</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--引入共有脚部-->
+        <div th:replace="include/admin/footer::html"></div>
+    </div>
+</div>
+
+
+
+<script src="js/all.js"></script>
+<script src="js/plugs_paging.js"></script>
+<script src="js/editor/ckeditor.js"></script>
+
+<script>
+    $(function(){
+        const data4Vue = {
+            editor: null,     //编辑器实例
+            uri: 'articles',
+            message: '',
+            show: false,
+            article: {id:0,author:{'id':0},originalAuthor:'',title:'',content:'',
+                tags:'',type:'',category:{'id':0}},
+            tags: [],
+            categories: []
+        };
+
+        //ViewModel
+        const vue = new Vue({
+            el: '#workingArea',
+            data: data4Vue,
+            mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+                this.loadTag();
+                this.loadCategory();
+                this.get();
+            },
+            methods: {
+                loadTag: function() {
+                    const url = "/admin_tag/tags";
+                    axios.get(url).then(function(response){
+                        vue.tags = response.data;
+                    });
+                },
+                loadCategory: function() {
+                    const url = "/all_categories";
+                    axios.get(url).then(function(response){
+                        vue.categories = response.data;
+                    });
+                },
+                closeAlert: function() {
+                    vue.show = false;
+                },
+                get:function(){
+                    const id = getUrlParms("id");
+                    const url = this.uri+"/"+id;
+                    axios.get(url).then(function(response) {
+                        vue.article = response.data;
+                        // vue.$options.methods.initCKEditor(response.data.content);
+                        CKEDITOR.replace('editor', {height: '300px', width: '100%', toolbar: 'toolbar_Full'});
+                        vue.editor = CKEDITOR.instances.editor;
+                        vue.editor.setData(response.data.content);
+                    })
+                },
+                update:function () {
+                    if (isEmpty(this.article.title)) {
+                        vue.message = "\"博客标题\"不能为空!";
+                        vue.show = true;
+                        return;
+                    }
+                    if (isEmpty(this.article.type)) {
+                        vue.message = "\"博客类型\"不能为空!";
+                        vue.show = true;
+                        return;
+                    }
+                    if (!isBiggerThan0(this.article.category.id)) {
+                        vue.message = "\"博客分类\"不能为空!";
+                        vue.show = true;
+                        return;
+                    }
+                    if (isEmpty(this.article.tagsId)) {
+                        vue.message = "\"博客标签\"不能为空!";
+                        vue.show = true;
+                        return;
+                    }
+                    if (this.article.tagsId.length>5) {
+                        vue.message = "\"博客标签\"不能超过5个!";
+                        vue.show = true;
+                        return;
+                    }
+                    if (isEmpty(this.article.originalAuthor) && this.article.type=='转载') {
+                        vue.message = "\"转载\"博客需填写源作者!";
+                        vue.show = true;
+                        return;
+                    }
+
+                    const url = this.uri;
+                    this.article.content = this.editor.getData();
+                    axios.put(url,vue.article).then(function(response){
+                        if (response.data.id > 0) {
+                            location.href = "/admin_article";
+                        } else {
+                            vue.message = "编辑失败!";
+                            vue.show = true;
+                        }
+                    }).catch(function (error) {
+                        vue.message = error;
+                        vue.show = true;
+                    });
+                },
+                initCKEditor(content) {
+                    class ImgUploadAdapter {
+                        constructor(loader) {
+                            this.loader = loader
+                        }
+                        upload() {  //重置上传路径
+                            return this.loader.file
+                                .then( file => new Promise( ( resolve, reject ) => {
+                                    this._initRequest();
+                                    this._initListeners( resolve, reject, file );
+                                    this._sendRequest( file );
+                                } ) );
+                        }
+
+                        // Aborts the upload process.
+                        abort() {
+                            if ( this.xhr ) {
+                                this.xhr.abort();
+                            }
+                        }
+
+                        // Initializes the XMLHttpRequest object using the URL passed to the constructor.
+                        _initRequest() {
+                            const xhr = this.xhr = new XMLHttpRequest();
+
+                            // Note that your request may look different. It is up to you and your editor
+                            // integration to choose the right communication channel. This example uses
+                            // a POST request with JSON as a data structure but your configuration
+                            // could be different.
+                            xhr.open( 'POST', '/admin_article/uploadImage', true );
+                            xhr.responseType = 'json';
+                        }
+
+                        // Initializes XMLHttpRequest listeners.
+                        _initListeners( resolve, reject, file ) {
+                            const xhr = this.xhr;
+                            const loader = this.loader;
+                            const genericErrorText = `Couldn't upload file: ${ file.name }.`;
+
+                            xhr.addEventListener( 'error', () => reject( genericErrorText ) );
+                            xhr.addEventListener( 'abort', () => reject() );
+                            xhr.addEventListener( 'load', () => {
+                                const response = xhr.response;
+
+                        .
+                                if ( !response || response.error ) {
+                                    return reject( response && response.error ? response.error.message : genericErrorText );
+                                }
+
+
+                                resolve( {
+                                    default: response.url
+                                } );
+                            } );
+
+
+                            if ( xhr.upload ) {
+                                xhr.upload.addEventListener( 'progress', evt => {
+                                    if ( evt.lengthComputable ) {
+                                        loader.uploadTotal = evt.total;
+                                        loader.uploaded = evt.loaded;
+                                    }
+                                } );
+                            }
+                        }
+
+                        _sendRequest( file ) {
+                            // Prepare the form data.
+                            const data = new FormData();
+
+                            data.append( 'upload', file );
+                            // Send the request.
+                            this.xhr.send( data );
+                        }
+                    }
+
+                    function ImgUploadAdapterPlugin( editor ) {
+                        // 加载适配器
+                        editor.plugins.get( 'FileRepository' ).createUploadAdapter = (loader) => {
+                            return new ImgUploadAdapter(loader)
+                        };
+                    }
+
+                    DecoupledEditor.create(document.querySelector('#editor'), {
+                        extraPlugins: [ ImgUploadAdapterPlugin ]
+                    }).then(editor => {
+                        const toolbarContainer = document.querySelector('#toolbar-container');
+                        toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+                        vue.editor = editor; //将编辑器保存起来，用来随时获取编辑器中的内容等，执行一些操作
+                        vue.editor.setData(content);
+                    }).catch(error => {
+                        console.error(error);
+                    });
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

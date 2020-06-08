@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:http="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" class="js cssanimations"
+      lang="en">
+<head th:include="include/fore/header::html"></head>
+<link href="css/fore/categories.css" rel="stylesheet">
+<link href="css/fore/tags.css" rel="stylesheet">
+<link href="css/fore/archives.css" rel="stylesheet">
+<body>
+<div th:replace="include/fore/top::html"></div>
+<div id="app">
+    <!--页面主体-->
+    <div id="main" style="width: 60%;">
+        <div class="am-container main-body">
+            <div class="am-g">
+                <div class="site-inner">
+                    <div class="am-input-group am-input-group-primary" style="width: 50%;">
+                          <span class="am-input-group-btn">
+                            <button class="am-btn am-btn-primary" type="button" @click="search">搜索</button>
+                          </span>
+                        <input type="text" class="am-form-field" @keyup.enter="search" v-model.trim="keyword">
+                    </div>
+                    <div style="width: 40%; float: right; display: inline-block; margin-top: -33px; min-width: 360px;" class="sort-result">
+                        <span><a href="#nowhere" :class="{ active: sort==1}" @click="sortResult(1)">综合排序</a> · <a href="#nowhere" :class="{ active: sort==2}" @click="sortResult(2)">热门文章</a> · <a href="#nowhere" :class="{ active: sort==3}" @click="sortResult(3)">最新发布</a></span><span style="float: right;">{{total}} 个结果</span>
+                    </div>
+                    <ul class="am-list" v-if="beans.length>0">
+                        <li class="am-animation-slide-bottom" v-for="result in beans" style="border-left: 0px solid #fff; border-right: 0px solid #fff; background-color: transparent; padding-bottom: 15px;">
+                            <a :href="'/article?aid='+result.id" target="_blank" style="font-size: 19px; margin-bottom: -7px;">[{{result.type}}] <span v-html="result.title"></span></a>
+                            <p style="color: rgb(153, 153, 153); margin-top: 0px; font-size: 16px; margin-bottom: 2px;">{{result.publishDate | formatDateFilter}}
+                                <span v-if="result.type=='转载'"> 来自 <a :href="result.originalUrl">{{result.originalAuthor}}</a> </span>
+                            </p>
+                            <span style="font-size: 16px; line-height: 20px; display: inline-block; color: rgb(153, 153, 153);" v-html="result.description"></span>
+                        </li>
+                    </ul>
+                    <div v-else class="less-than-zero">
+                        <img src="/img/null.png">
+                        <p>空空如也</p>
+                    </div>
+                    <div v-if="beans.length>0"><div th:replace="include/page::html"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--引入共有底部-->
+    <div th:replace="include/footer::footer"></div>
+</div>
+
+<script src="js/all.js"></script>
+<script src="js/scroll.js"></script>
+<script src="js/fore/search.js"></script>
+<script>
+    var data4Vue = {
+        item: ''
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body></html>

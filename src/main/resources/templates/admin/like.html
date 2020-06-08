@@ -1,0 +1,69 @@
+<!doctype html>
+<html class="no-js fixed-layout" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml">
+<head th:include="include/admin/header::html"></head>
+<body>
+
+    <!--引入共有头部-->
+    <div th:replace="include/top::header"></div>
+
+    <!--页面主体内容-->
+    <div class="am-cf admin-main" style="padding-top: 0">
+
+        <!--引入共有左侧-->
+        <div th:replace="include/admin/left::html"></div>
+
+        <!--右侧-->
+        <div class="admin-content" id="app">
+            <div class="superAdminInfo">
+                <div class="superFunction" id="articleThumbsUp">
+                    <div class="subject">
+                        <div class="thumbsUpManagement">
+                            <ol class="am-breadcrumb  am-breadcrumb-slash navigationBar">
+                                <li class="am-active am-icon-home"> 后台管理</li>
+                                <li class="am-active">点赞管理</li>
+                            </ol>
+                            <div class="msgContent am-animation-slide-right">
+                                <!--填充文章点赞信息-->
+                                <div class="msgReadTop">
+                                    未读消息：<span class="msgIsReadNum">{{notRead}}</span>
+                                    <a href="#" class="msgIsRead" @click="allOfRead">全部标记为已读</a>
+                                </div>
+                                <div class="msgRead am-g admin-like" v-for="(like,i) in beans" :class="i<beans.length-1?'admin-like-border':''">
+                                    <div class="am-u-sm-1">
+                                        <img src="/img/icon.jpg" class="portrait-img">
+                                    </div>
+
+                                    <div class="am-u-sm-11">
+                                        <div style="margin-left: -50px;">
+                                            <span class="am-icon-heart" style="color: red" v-if="like.isRead==0"></span>
+                                            <span class="msgHead like-content"><a class="msgPerson">{{like.user.username}}</a></span>
+                                            <div class="msgTxt like-content" style="width: 600px;">
+                                                <span>点赞了你的博客<a class="articleTitle" :href="'/article?aid='+like.article.id" target="_blank"> {{like.article.title}}</a></span>
+                                                <p class="msgDate">{{like.likeDate | formatDateTimeFilter}}</p>
+                                            </div>
+                                            <div class="my-row">
+                                                <div class="thumbsUpPagination"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:replace="include/page::html" ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--引入共有脚部-->
+            <div th:replace="include/admin/footer::html"></div>
+        </div>
+    </div>
+
+    <!--手机适配显示左侧按钮-->
+    <a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+<script src="js/all.js"></script>
+<script src="js/plugs_paging.js"></script>
+<script src="js/admin/admin_like.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<style>
+    .top_bar_active {
+        color: #008000 !important;
+        background-color: transparent !important;
+    }
+</style>
+<div class="header" th:fragment="html" id="top">
+    <div class="am-topbar" style="background-color: #303643; position: fixed; z-index:999; width:100%; border-color: transparent;">
+        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+        <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse" style="width: 75%; margin: 0 auto;">
+            <ul class="am-nav am-nav-pills am-topbar-nav" style="padding-left: 0px; padding-top: 2px;">
+                <li v-if="item == 'home'"><a class="top_bar top_bar_a top_bar_active" href="/"><span class="am-icon-home"></span>&nbsp;首页</a></li>
+                <li v-else><a class="top_bar top_bar_a" href="/"><span class="am-icon-home"></span>&nbsp;首页</a></li>
+                <li v-if="item == 'category'"><a class="top_bar top_bar_a top_bar_active" href="/categories"><span class=""></span>&nbsp;文件夹</a></li>
+                <li v-else><a class="top_bar top_bar_a" href="/categories"><span class=""></span>&nbsp;文件夹</a></li>
+                <li v-if="item == 'date'"><a class="top_bar top_bar_a top_bar_active" href="/date"><span class=""></span>&nbsp;日期</a></li>
+                <li v-else><a class="top_bar top_bar_a" href="/date"><span class=""></span>&nbsp;日期</a></li>
+                <li v-if="item == 'tag'"><a class="top_bar top_bar_a top_bar_active" href="/tags"><span class=""></span>&nbsp;标签墙</a></li>
+                <li v-else><a class="top_bar top_bar_a" href="/tags"><span class=""></span>&nbsp;标签墙</a></li>
+                <!--<li><a class="top_bar top_bar_a" href="/update"><span class=""></span>&nbsp;更新</a></li>-->
+                <li v-if="item == 'link'"><a class="top_bar top_bar_a top_bar_active" href="/friendlylink"><span class=""></span>&nbsp;友链</a></li>
+                <li v-else><a class="top_bar top_bar_a" href="/friendlylink"><span class=""></span>&nbsp;友链</a></li>
+            </ul>
+
+            <div class="am-topbar-right" th:if="${null!=session.user}" style="margin-top: 8px; border-radius: 2px;">
+                <div class="am-dropdown" data-am-dropdown="">
+                    <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle="">
+                        <span th:text="${session.user.username}"></span> <span class="am-icon-caret-down"></span>
+                    </button>
+                    <ul class="am-dropdown-content">
+                        <li><a href="/home">个人主页</a></li>
+                        <li><a href="/activity">动态</a></li>
+                        <li><a href="/message">消息</a></li>
+                        <li th:if="${3==session.role}"><a href="/admin">管理员</a></li>
+                        <li class="am-divider"></li>
+                        <li><a href="logout">退出登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="am-topbar-right" th:if="${null==session.user}" style="margin-top: 3px; float: right;">
+                <a href="/register" class="am-btn am-btn-primary am-topbar-btn am-btn-sm" style="color: white">注册</a>
+            </div>
+            <div class="am-topbar-right" th:if="${null==session.user}" style="margin-top: 3px; float: right;">
+                <a href="/login" class="loginBtn am-btn am-btn-primary am-topbar-btn am-btn-sm" style="color: white">登录</a>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

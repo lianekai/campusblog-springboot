@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:http="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" class="js cssanimations"
+      lang="en">
+<head th:include="include/fore/header::html"></head>
+<link href="css/fore/categories.css" rel="stylesheet">
+<link href="css/fore/tags.css" rel="stylesheet">
+<link href="css/fore/archives.css" rel="stylesheet">
+<body>
+<div th:replace="include/fore/top::html"></div>
+<div id="app">
+    <!--页面主体-->
+    <div id="main" style="width: 60%;">
+        <div class="am-container main-body">
+            <div class="am-g">
+                <div class="site-inner">
+                    <h3 style="font-size: 18px;"><span class="am-icon-link"></span> 友情链接</h3>
+                    <ul class="am-list am-list-border">
+                        <li class="am-animation-slide-right" v-for="link in beans" style="border-left: 0px solid #fff; border-right: 0px solid #fff; background-color: transparent;"><a :href="link.url" target="_blank">{{link.blogger}}</a></li>
+                        <div v-if="beans.length<=0" class="less-than-zero">
+                            <img src="/img/null.png">
+                            <p>空空如也</p>
+                        </div>
+                    </ul>
+                    <div v-if="beans.length>0"><div th:replace="include/page::html"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--引入共有底部-->
+    <div th:replace="include/footer::footer"></div>
+</div>
+
+<script src="js/all.js"></script>
+<script src="js/scroll.js"></script>
+<script src="js/fore/link.js"></script>
+<script>
+    var data4Vue = {
+        item: 'link'
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body></html>

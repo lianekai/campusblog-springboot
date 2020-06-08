@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--左侧-->
+<div class="admin-sidebar am-offcanvas" id="admin-offcanvas" th:fragment="html">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+        <ul class="superAdminList am-list admin-sidebar-list">
+            <li class="superAdminClick statistics"><a href="/admin"><span class="am-icon-home"></span> 仪表盘</a></li>
+            <li class="article admin-parent">
+                <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 文章管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+                <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+                    <li class="superAdminClick articleManagement"><a class="am-cf" href="/admin_article"><span class="am-icon-check"></span> 文章管理<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+                    <li class="superAdminClick articleThumbsUp"><a class="am-cf" href="/admin_like"><span class="am-icon-thumbs-up"></span> 点赞管理</a></li>
+                    <li class="superAdminClick articleCategories"><a class="am-cf" href="/admin_category"><span class="am-icon-th"></span> 分类管理</a></li>
+                    <li class="superAdminClick articleTags"><a class="am-cf" href="/admin_tag"><span class="am-icon-tags"></span> 标签管理</a></li>
+                    <li class="superAdminClick articleTags"><a class="am-cf" href="/admin_comment"><span class="am-icon-comment"></span> 评论管理</a></li>
+                </ul>
+            </li>
+            <li class="superAdminClick friendLink"><a href="/admin_link"><span class="am-icon-link"></span> 友链管理</a></li>
+            <li class="superAdminClick userFeedback"><a href="/admin_user"><span class="am-icon-users"></span> 用户管理</a></li>
+            <li class="superAdminClick privateWord" style="width: 100%"><a href="/admin_message"><span class="am-icon-pencil-square-o"></span> 留言</a></li>
+        </ul>
+
+        <div class="am-panel am-panel-default admin-sidebar-panel">
+            <div class="am-panel-bd">
+                <p><span class="am-icon-bookmark"></span> 公告</p>
+                <p>专为北理师生服务的平台</p><p style="text-align: right;">—— zhbit</p>
+            </div>
+        </div>
+
+    </div>
+</div>

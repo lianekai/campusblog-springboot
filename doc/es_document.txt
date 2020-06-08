@@ -1,0 +1,134 @@
+{
+    "mappings":{
+        "article":{
+            "properties":{
+								"id":{
+										"type":"keyword",
+                    "store":true
+								},
+                "originalUrl":{
+                    "type":"keyword",
+                    "store":true
+                },
+                "originalAuthor":{
+                    "type":"keyword",
+                    "store":true
+                },
+                "author":{
+                    "properties": {
+												"id": {
+													"type": "keyword",
+													"store":true
+												},
+												"phone": {
+													"type": "keyword",
+													"store":true
+												},
+												"username": {
+													"type": "keyword",
+													"store":true
+												},
+												"password": {
+													"type": "keyword",
+													"store":true
+												},
+												"gender": {
+													"type": "text"
+												},
+												"trueName": {
+													"type": "text"
+												},
+												"birthday": {
+													"type":"date",
+                    			"store":true,
+                    			"format":"yyyy-MM-dd HH:mm:ss"
+												},
+												"email": {
+													"type": "keyword",
+													"store":true
+												},
+												"personalBrief": {
+													"type": "keyword",
+													"store":true
+												},
+												"recentlyLanded": {
+													"type":"date",
+                    			"store":true,
+                    			"format":"yyyy-MM-dd HH:mm:ss"
+												},
+												"salt": {
+													"type": "keyword",
+													"store":true
+												},
+												"face": {
+													"type": "keyword",
+													"store":true
+												},
+												"registerTime": {
+													"type":"date",
+                    			"store":true,
+                    			"format":"yyyy-MM-dd HH:mm:ss"
+												},
+												"status":{
+													"type":"integer",
+													"store":true
+												},
+												"type":{
+													"type":"integer",
+													"store":true
+												}
+										}
+                },
+                "category":{
+                    "properties": {
+												"id": {
+													"type": "keyword",
+													"store":true
+												},
+												"name": {
+													"type": "keyword",
+													"store":true
+												},
+												"createdAt": {
+													"type":"date",
+                    			"store":true,
+                    			"format":"yyyy-MM-dd HH:mm:ss"
+												}
+										}
+                },
+                "title":{
+                    "type":"text",
+                    "store":true,
+                    "analyzer":"jieba_index"
+                },
+                "content":{
+                    "type":"text",
+                    "analyzer":"jieba_index"
+                },
+								"description":{
+                    "type":"text",
+                    "analyzer":"jieba_index"
+                },
+                "publishDate":{
+                    "type":"date",
+                    "store":true,
+                    "format":"yyyy-MM-dd HH:mm:ss"
+                },
+								"updateDate":{
+                    "type":"date",
+                    "store":true,
+                    "format":"yyyy-MM-dd HH:mm:ss"
+                },
+                "type":{
+                    "type":"keyword",
+                    "store":true
+                },
+                "tags":{
+                    "type":"keyword",
+                    "store":true
+                }
+            }
+        }
+    }
+}
+

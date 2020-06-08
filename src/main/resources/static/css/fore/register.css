@@ -1,0 +1,45 @@
+.work-space {
+    width: 400px;
+    background-color: #ffffff;
+    margin: 145px auto 0 auto;
+    box-shadow: 0 0 8px rgba(0,0,0,.1);
+    border-radius: 4px;
+    padding: 40px 50px 30px;
+    vertical-align: middle;
+}
+.work-space .top {
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+.work-space .dot {
+    font-size: 30px;
+    color: rgb(150, 150, 150);
+}
+.work-space .top a {
+    color: rgb(150, 150, 150);
+    display: inline-block;
+    width: 56px;
+    height: 43px;
+    line-height: 43px;
+}
+.work-space .top a:hover {
+    color: 	#008000 !important;
+}
+.work-space .active {
+    font-weight: 700;
+    color:	#008000 !important;
+    border-bottom: 2px solid 	#008000;
+}
+.work-space .button {
+    width: 300px;
+    height: 43px;
+    background-color: 	#008000;
+    border-radius: 21.5px;
+    color: #fff;
+    display: inline-block;
+    text-align: center;
+    line-height: 43px;
+    margin-top: 20px;
+}

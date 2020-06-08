@@ -1,0 +1,96 @@
+<!doctype html>
+<html class="no-js fixed-layout" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml">
+<head th:include="include/admin/header::html"></head>
+<body>
+
+    <!--引入共有头部-->
+    <div th:replace="include/top::header"></div>
+
+    <!--页面主体内容-->
+    <div class="am-cf admin-main" style="padding-top: 0">
+
+        <!--引入共有左侧-->
+        <div th:replace="include/admin/left::html"></div>
+
+        <!--右侧-->
+        <div class="admin-content" id="app">
+            <div class="superAdminInfo">
+                <div class="superFunction" id="friendLink">
+                    <div class="subject">
+                        <div class="friendLinkManagement">
+                            <ol class="am-breadcrumb  am-breadcrumb-slash navigationBar">
+                                <li class="am-active am-icon-home"> 后台管理</li>
+                                <li class="am-active">友链管理</li>
+                            </ol>
+                            <div class="friendLinkContent">
+                                目前友链数：<span class="categoryNum">{{countAll}}</span>
+                                <div class="updateCategory">
+                                    <a class="addCategory" id="add-link"><i class="am-icon-plus-square"></i> 添加友链</a>
+                                </div>
+                                <table class="am-table am-table-bordered am-table-striped am-table-hover" style="width: 800px; margin-top: 20px;">
+                                    <thead>
+                                    <tr>
+                                        <th>网站名称</th>
+                                        <th>网址</th>
+                                        <th>创建时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="link in beans">
+                                        <td>{{link.blogger}}</td>
+                                        <td><a href="link.url">{{link.url}}</a></td>
+                                        <td>{{link.createdAt | formatDateTimeFilter}}</td>
+                                        <td>
+                                            <a class="" href="#nowhere" @click="get(link.id)">编辑</a>
+                                            <a class="" href="#nowhere" @click="deleteBean(link.id)">删除</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div th:replace="include/page::html" ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--引入共有脚部-->
+            <div th:replace="include/admin/footer::html"></div>
+        </div>
+    </div>
+
+    <div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">添加友链</div>
+            <div class="am-modal-bd">
+                <input type="text" class="am-modal-prompt-input" id="blogger" placeholder="博主名称">
+                <input type="text" class="am-modal-prompt-input" id="url" placeholder="链接">
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>提交</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="am-modal am-modal-prompt" tabindex="-1" id="update-link">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">编辑友链</div>
+            <div class="am-modal-bd">
+                <input type="text" class="am-modal-prompt-input" id="edit-blogger" placeholder="博主名称">
+                <input type="text" class="am-modal-prompt-input" id="edit-url" placeholder="链接">
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>提交</span>
+            </div>
+        </div>
+    </div>
+
+<script src="js/all.js"></script>
+<script src="js/plugs_paging.js"></script>
+<script src="js/admin/admin_link.js"></script>
+
+</body>
+</html>

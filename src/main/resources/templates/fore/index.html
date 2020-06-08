@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="include/fore/header::html"></head>
+<body>
+<div th:replace="include/fore/top::html"></div>
+<div id="app">
+    <!--页面主体-->
+    <div id="main">
+        <div class="am-g main-body">
+            <div class="am-u-sm-12 am-u-lg-3 industry">
+                <div id="left">
+                    <!--我的卡片-->
+                    <div class="myCard">
+                        <div class="am-g">
+                            <div class="img-title">
+                                <img class="img" src="img/loading2.gif" data-src="img/icon3.jpg" alt="Campus_blog">
+                            </div>
+                            <div class="img-words">
+                                <h3 id="name">北理风采</h3>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div id="connection" style="font-size: 14px">
+
+                        </div>
+                        <hr>
+
+                     </div>
+
+                     <!--搜索文章-->
+                    <div class="new-comment">
+                        <div class="am-list-news am-list-news-default">
+                            <div class="am-list-news-hd am-cf" style="padding-bottom: 0px; border-bottom: 1px solid #ebebeb !important;">
+                                <a class="newComments">
+                                    <h2 style="border-bottom: 1px solid #2f2f2d; padding-bottom: 28px;">搜索文章</h2>
+                                </a>
+                            </div>
+                            <div class="am-list-news-bd" style="padding-top: 20px;">
+                                <div class="am-form-group am-form-icon">
+                                    <a href="#nowhere" @click="search"><i class="am-icon-search"></i></a>
+                                    <input type="text" class="am-form-field am-round" placeholder="请输入关键字"
+                                           @keyup.enter="search" v-model.trim="keyword">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!--评论最多的文章-->
+                    <div class="new-comment">
+                        <div class="am-list-news am-list-news-default">
+                            <div class="am-list-news-hd am-cf" style="padding-bottom: 0px;">
+                                <a class="newComments">
+                                    <h2 style="border-bottom: 1px solid #2f2f2d; padding-bottom: 28px;">评论最多的文章</h2>
+                                </a>
+                            </div>
+                            <div class="am-list-news-bd">
+                                <ul class="am-list">
+                                    <li class="am-g am-list-item-dated index-left-li" v-for="mc in mostComment">
+                                        <a class="newCommentTitle am-list-item-hd" :href="'/article?aid='+mc.id" style="padding-bottom: 5px" :title="mc.title">{{mc.title}}</a>
+                                        <span class="am-list-date index-left-date">{{mc.publishDate | formatDateFilter}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!--访问最多的文章-->
+                    <div class="new-leaveWord">
+                        <div class="am-list-news am-list-news-default" >
+                            <div class="am-list-news-hd am-cf" style="padding-bottom: 0px;">
+                                <a class="newLeaveWord">
+                                    <h2 style="border-bottom: 1px solid #2f2f2d; padding-bottom: 28px;">访问最多的文章</h2>
+                                </a>
+                            </div>
+                            <div class="am-list-news-bd">
+                                <ul class="am-list">
+                                    <li class="am-g am-list-item-dated index-left-li" v-for="mt in mostVisit">
+                                        <a class="newCommentTitle am-list-item-hd" :href="'/article?aid='+mt.id" style="padding-bottom: 5px" :title="mt.title">{{mt.title}}</a>
+                                        <span class="am-list-date index-left-date">{{mt.publishDate | formatDateFilter}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tag-cloud">
+                        <h3 class="widget-title">标签云</h3>
+                        <div class="widget-tag-cloud" v-for="t in tags">
+                            <a :href="'/article_of_tag?tid='+t.id" :id="forTagId(t.id)" :style="{'color':changeColor(t.articleCount)}">{{t.name}}</a>
+                        </div>
+                    </div>
+
+                    <div class="site-info">
+                        <h5 class="site-title">
+                            <i class="am-icon-info site-icon"></i>
+                            <strong style="margin-left: 15px">网站统计</strong>
+                        </h5>
+                        <ul class="site-default" style="height: 200px">
+                            <li>
+                                <i class="am-icon-file site-default-icon"></i><span class="site-default-word">文章总数</span>：{{articlesCount}} 篇
+                            </li>
+                            <li>
+                                <i class="am-icon-comment-o site-default-icon"></i><span class="site-default-word">评论总数</span>：{{commentsCount}} 条
+                            </li>
+                            <li>
+                                <i class="am-icon-eye site-default-icon"></i><span class="site-default-word">浏览总数</span>：{{visitCount}} 次
+                            </li>
+                            <li>
+                                <i class="am-icon-user site-default-icon"></i><span class="site-default-word">访客总数</span>：{{visitorCount}} 个
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="showArticle am-u-sm-12 am-u-lg-6">
+                <div class="articles">
+                    <div v-if="articles.length>0">
+                        <div class="center" v-for="a in articles">
+                            <div class="empty">
+                                <header class="article-header">
+                                    <h1 itemprop="name">
+                                        <a class="article-title" :href="'/article?aid='+a.id" target="_blank">{{a.title}}</a>
+                                    </h1>
+                                    <div class="article-meta row">
+                                        <span class="articleType am-badge am-badge-success">{{a.type}}</span>
+                                        <div class="articlePublishDate">
+                                            <i class="am-icon-calendar" title="发布日期"><a class="linkColor" :href="'/date?date='+splitDate(a.publishDate)+'&start=0'"> {{a.publishDate | formatDateFilter}} </a></i>
+                                        </div>
+                                        <div class="originalAuthor">
+                                            <i class="am-icon-user" title="发布者" v-if="a.type==='转载'&&a.originalAuthor.length>0"><a class="linkColor" :href="a.originalUrl"> {{a.originalAuthor}} </a></i>
+                                            <i class="am-icon-user" title="发布者" v-else> {{a.author.username}} </i>
+                                            <i class="am-icon-folder" title="文件夹"><a class="linkColor" :href="'/categories?cid='+a.category.id+'&name='+a.category.name+'&start=0'"> {{a.category.name}} </a></i>
+                                            <i class="am-icon-eye" title="阅读数"> {{read_count_map[a.id]}} </i>
+                                            <!--<i class="am-icon-comment" title="评论数"><span :id="forCommentId(a.id)"> {{comment_count_map(a.id)}} </span></i>-->
+                                            <i class="am-icon-comment" title="评论数"> {{comment_count_map[a.id]}} </i>
+                                            <i class="am-icon-thumbs-up" title="点赞数"> {{like_count_map[a.id]}} </i>
+                                        </div>
+                                    </div>
+                                </header>
+                                <div class="article-entry">
+                                    <div v-if="a.img!=null&&a.img.length>0">
+                                        <div class="am-u-sm-9 am-u-md-9 am-u-lg-9" style="padding-left: 0px !important; padding-right: 0px !important; min-height: 81.6px;">
+                                            {{a.description}}
+                                        </div>
+                                        <div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="height: 125px;">
+                                            <img :src="a.img">
+                                        </div>
+                                    </div>
+                                    <div v-else>
+                                        {{a.description}}
+                                    </div>
+                                </div>
+                                <div class="article-tags">
+                                    <i class="am-icon-tag" v-for="tag in a.tagList"><a class="tag" :href="'/article_of_tag?tid='+tag.id"> {{tag.name}} </a></i>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="less-than-zero">
+                        <img src="/img/null.png">
+                        <p>空空如也</p>
+                    </div>
+                </div>
+                <div v-if="articles.length>0"><div th:replace="include/page::html"></div></div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!--引入共有底部-->
+    <div th:replace="include/footer::footer"></div>
+</div>
+
+<script src="js/fore/index.js"></script>
+<script src="js/all.js"></script>
+<script src="js/scroll.js"></script>
+<script>
+    var data4Vue = {
+        item: 'home'
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body>
+</html>

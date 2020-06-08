@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    <!--所有页面共有头部-->
+    <div th:fragment="header">
+        <div class="header">
+            <div class="am-topbar" style="margin-bottom: 0">
+                <h1 class="am-topbar-brand">
+                    <a href="/" class="blogTitleName"><img src="img/icon3.jpg" class="imgStyle" alt="zhbit">zhbit</a>
+                </h1>
+
+                <!--手机适配导航显示按钮-->
+                <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" style="background-color: #CCCCCC;border-color: white;border-radius: 6px" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+                <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+                    <ul class="am-nav am-nav-pills am-topbar-nav">
+                        <li><a class="top_bar" href="/" style="cursor: pointer;"><span class="am-icon-home"></span>&nbsp;首页</a></li>
+                        <li><a class="top_bar" href="/categories" style="cursor: pointer;"><span class="am-icon-th"></span>&nbsp;文件夹</a></li>
+                        <li><a class="top_bar" href="/date" style="cursor: pointer;"><span class="am-icon-archive"></span>&nbsp;日期</a></li>
+                        <li><a class="top_bar" href="/tags" style="cursor: pointer;"><span class="am-icon-tags"></span>&nbsp;标签墙</a></li>
+                        <li><a class="top_bar" href="/friendlylink" style="cursor: pointer;"><span class="am-icon-street-view"></span>&nbsp;友链</a></li>
+                    </ul>
+
+                    <div class="am-topbar-right" th:if="${null!=session.user}" style="margin-top: 8px; border-radius: 2px;">
+                        <div class="am-dropdown" data-am-dropdown="">
+                            <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle="">
+                                <span th:text="${session.user.username}"></span> <span class="am-icon-caret-down"></span>
+                            </button>
+                            <ul class="am-dropdown-content">
+                                <li><a href="">动态</a></li>
+                                <li><a href="">消息</a></li>
+                                <li th:if="${3==session.role}"><a href="/admin">管理员</a></li>
+                                <li class="am-divider"></li>
+                                <li><a href="logout">退出登录</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="am-topbar-right" th:unless="${#httpServletRequest.remoteUser}">
+                        <a href="/register" class="am-btn am-btn-primary am-topbar-btn am-btn-sm" style="color: white">注册</a>
+                    </div>
+                    <div class="am-topbar-right" th:unless="${#httpServletRequest.remoteUser}">
+                        <a href="/login" class="loginBtn am-btn am-btn-primary am-topbar-btn am-btn-sm" style="color: white">登录</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</html>

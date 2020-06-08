@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:http="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" class="js cssanimations"
+      lang="en">
+<head th:include="include/fore/header::html"></head>
+<link href="css/fore/categories.css" rel="stylesheet">
+<link href="css/fore/tags.css" rel="stylesheet">
+<link href="css/fore/archives.css" rel="stylesheet">
+<body>
+<div th:replace="include/fore/top::html"></div>
+<div id="app">
+    <!--页面主体-->
+    <div id="main" style="width: 60%;">
+        <div class="am-container main-body">
+            <div class="am-g">
+                <div class="site-inner">
+                    <div class="am-u-sm-12 am-u-md-12">
+                        <div class="categoryTimeline">
+                            <div class="timeline timeline-wrap">
+                                <div class="timeline-row">
+                                    <span class="node" style="-webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;"><i class="am-icon-tag"></i></span>
+                                    <h1 class="title  am-animation-slide-top" style="font-size: 20px; font-weight: bold;"># {{tag.name}}</h1>
+                                </div>
+                                <div v-if="articles.length>0">
+                                    <div v-for="(a,i) in articles">
+                                        <div class="timeline-row-major">
+                                            <span class="node am-animation-slide-top am-animation-delay-1"></span>
+                                            <div class="content am-comment-main am-animation-slide-top am-animation-delay-1">
+                                                <header class="am-comment-hd" style="background: #fff">
+                                                    <div class="contentTitle am-comment-meta">
+                                                        <a :href="'/article?aid='+a.id">{{a.title}}</a>
+                                                    </div>
+                                                </header>
+                                                <div class="am-comment-bd">
+                                                    <i class="am-icon-calendar"><a :href="'/date?date='+splitDate(a.publishDate)+'&start=0'"> {{a.publishDate | formatDateFilter}}</a></i>
+                                                    <i class="am-icon-folder"> <a :href="'/categories?cid='+a.category.id+'&name='+a.category.name+'&start=0'">{{a.category.name}}</a></i>
+                                                    <i class="am-comment-bd-tags am-icon-tag">
+                                                        <span v-for="(t,i) in a.tagList"> {{t.name}}<span v-if="i<a.tagList.length-1">,</span></span>
+                                                    </i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else class="less-than-zero">
+                                <img src="/img/null.png">
+                                <p>空空如也</p>
+                            </div>
+                            <!--引入分页-->
+                            <div v-if="articles.length>0"><div th:replace="include/page::html"></div></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--引入共有底部-->
+    <div th:replace="include/footer::footer"></div>
+</div>
+
+<script src="js/all.js"></script>
+<script src="js/scroll.js"></script>
+<script src="js/fore/article_of_tag.js"></script>
+<script>
+    var data4Vue = {
+        item: 'tag'
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body></html>

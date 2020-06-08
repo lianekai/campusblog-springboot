@@ -1,0 +1,186 @@
+<template th:fragment="html" xmlns:th="http://www.w3.org/1999/XSL/Transform">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CampusBlog | 后台管理</title>
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="img3/icon.jpg">
+
+    <link href="css/amazeui.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="css/admin/admin.css">
+    <link rel="stylesheet" href="css/plugs_paging.css">
+    <link href="css/fontawesome.min.css" rel="stylesheet">
+
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/amazeui.min.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/axios.min.js"></script>
+
+    <script>
+        function formatDateTime(date){
+            date = new Date(date);
+            var format = "yyyy-MM-dd HH:mm:ss";
+            var o = {
+                'M+' : date.getMonth() + 1, //month
+                'd+' : date.getDate(), //day
+                'H+' : date.getHours(), //hour+8小时
+                'm+' : date.getMinutes(), //minute
+                's+' : date.getSeconds(), //second
+                'q+' : Math.floor((date.getMonth() + 3) / 3), //quarter
+                'S' : date.getMilliseconds() //millisecond
+            };
+            if (/(y+)/.test(format))
+                format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+
+            for (var k in o)
+                if (new RegExp('(' + k + ')').test(format))
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
+
+            return format;
+        }
+
+        Vue.filter("formatDateTimeFilter", function(value){
+            return formatDateTime(value);
+        });
+
+        //跳转函数
+        function jump(page,vue){
+            if('first'== page && !vue.pagination.first) {
+                vue.list(0);
+                delPageStyle();
+                const a = document.getElementById("1");
+                a.style.cssText = "background-color: #eee;";
+            }
+
+            else if('pre'== page &&	vue.pagination.hasPrevious ) {
+                vue.list(vue.pagination.number - 1);
+                if (vue.pagination.number+1 < 3 || vue.pagination.number+1 > vue.pagination.totalPages-1) {
+                    delPageStyle();
+                    const a = document.getElementById(vue.pagination.number);
+                    a.style.cssText = "background-color: #eee;";
+                }
+            }
+
+            else if('next'== page && vue.pagination.hasNext) {
+                vue.list(vue.pagination.number + 1);
+                if (vue.pagination.number+2 < 3 || vue.pagination.number+2 > vue.pagination.totalPages-1) {
+                    delPageStyle();
+                    const a = document.getElementById(vue.pagination.number+2);
+                    a.style.cssText = "background-color: #eee;";
+                }
+            }
+
+            else if('last'== page && !vue.pagination.last) {
+                vue.list(vue.pagination.totalPages - 1);
+                delPageStyle();
+                const a = document.getElementById(vue.pagination.totalPages);
+                a.style.cssText = "background-color: #eee;";
+            }
+        }
+        //跳转函数
+        function jumpByNumber(start,vue){
+            if(start!=vue.pagination.number) {
+                vue.list(start);
+                if ((start+1 < 3 || start+1 > vue.pagination.totalPages-1) && start-vue.pagination.number == 1) {
+                    delPageStyle();
+                    const a = document.getElementById(start + 1);
+                    if (a != null)
+                        a.style.cssText = "background-color: #eee;";
+                }
+                if ((start+1 < 2 || start+1 > vue.pagination.totalPages-2) && start-vue.pagination.number == -1) {
+                    delPageStyle();
+                    const a = document.getElementById(start + 1);
+                    if (a != null)
+                        a.style.cssText = "background-color: #eee;";
+                }
+                if ((start+1 <= 3 || start+1 >= vue.pagination.totalPages-1) && start-vue.pagination.number == 2) {
+                    delPageStyle();
+                    if (vue.pagination.totalPages === 3) {
+                        var a = document.getElementById(start+1);
+                    } else {
+                        var a = document.getElementById(start);
+                    }
+                    if (a != null)
+                        a.style.cssText = "background-color: #eee;";
+                }
+                if ((start+1 <= 2 || start+1 >= vue.pagination.totalPages-2) && start-vue.pagination.number == -2) {
+                    delPageStyle();
+                    if (vue.pagination.totalPages === 3) {
+                        var a = document.getElementById(start+1);
+                    } else {
+                        var a = document.getElementById(start+2);
+                    }
+                    if (a != null)
+                        a.style.cssText = "background-color: #eee;";
+                }
+            }
+        }
+        //获取地址栏参数的函数
+        function getUrlParms(para){
+            var search=location.search; //页面URL的查询部分字符串
+            var arrPara=new Array(); //参数数组。数组单项为包含参数名和参数值的字符串，如“para=value”
+            var arrVal=new Array(); //参数值数组。用于存储查找到的参数值
+
+            if(search!=""){
+                var index=0;
+                search=search.substr(1); //去除开头的“?”
+                arrPara=search.split("&");
+
+                for(i in arrPara){
+                    var paraPre=para+"="; //参数前缀。即参数名+“=”，如“para=”
+                    if(arrPara[i].indexOf(paraPre)==0&& paraPre.length<arrPara[i].length){
+                        arrVal[index]=decodeURI(arrPara[i].substr(paraPre.length)); //顺带URI解码避免出现乱码
+                        index++;
+                    }
+                }
+            }
+
+            if(arrVal.length==1){
+                return arrVal[0];
+            }else if(arrVal.length==0){
+                return null;
+            }else{
+                return arrVal;
+            }
+        }
+
+        // 抹除分页所有a标签选中样式
+        function delPageStyle() {
+            const page_nums = document.getElementsByClassName("page-num");
+            for (var num = 0; num < page_nums.length; num++) {
+                page_nums[num].style.cssText = "background-color: #fff;";
+            }
+        }
+
+        //判断是否为空
+        function isEmpty(value){
+            if(null==value || value.length==0){
+                return true;
+            }
+            return false;
+        }
+
+        //判断是否为整数
+        function checkInt(value){
+
+            if(value.length==0){
+                return false;
+            }
+            if(parseInt(value)!=value){
+                return false;
+            }
+            return true;
+        }
+
+        //判断是否为整数
+        function isBiggerThan0(value){
+            if(value>0){
+                return true;
+            }
+            return false;
+        }
+    </script>
+</template>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html class="no-js fixed-layout" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml">
+<head th:include="include/fore/header::html"></head>
+<body>
+
+    <!--引入共有头部-->
+    <div th:replace="include/fore/top::html"></div>
+
+    <!--页面主体内容-->
+    <div class="am-cf admin-main" style="padding-top: 0">
+        <!--右侧-->
+        <div id="app">
+            <div id="main">
+                <div class="superAdminInfo">
+                    <div class="superFunction" id="userFeedback">
+                        <div class="subject">
+                            <div class="superFunction" id="privateWord">
+                                <div class="subject" style="padding: 20px 40px 0 40px;">
+                                    <span>未读消息：{{countAll}}</span>
+                                    <a href="#nowhere" @click="allOfRead" style="float: right;">全部标记已读</a>
+                                    <div class="am-tabs" data-am-tabs>
+                                        <div class="am-tabs-bd" style="border: 0 #fff solid;">
+                                            <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                                                <div class="privateWord am-animation-slide-right" style="padding: 0 60px 0 0;" v-if="comments.length>0">
+                                                    <div class="msgRead am-g admin-like" v-for="(comment,i) in comments" :class="i<comments.length-1?'admin-like-border':''">
+                                                        <div class="am-u-sm-1">
+                                                            <img :src="comment.answerer.face" class="portrait-img">
+                                                            <span v-if="comment.isRead==0" class="message-not-read"></span>
+                                                        </div>
+
+                                                        <div class="am-u-sm-11">
+                                                            <div style="margin-left: -39px;">
+                                                                <span class="msgHead like-content"><a class="msgPerson">{{comment.answerer.username}}</a></span> <span class="msgDate">{{comment.createdAt | formatDateTimeFilter}}</span>
+                                                                <div class="msgTxt like-content" style="width: 600px;">
+                                                                    <p style="margin-bottom: 0px;">
+                                                                        <span v-if="comment.parent != null">回复: <span style="color: #4183c4;">@{{comment.parent.answerer.username}} </span></span>{{comment.content}}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="my-row">
+                                                                    <div class="thumbsUpPagination"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div style="margin-bottom: 20px; margin-left: -9px;">
+                                                            <img src="/img/admin/caret.png" class="admin-comment-caret">
+                                                            <div class="admin-comment-tips">
+                                                                <a :href="'/article?aid='+comment.article.id" target="_blank">{{comment.article.title}}</a>
+                                                                <p style="margin-top: 5px;">{{comment.article.description}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div th:replace="include/page::html" ></div>
+                                                </div>
+                                                <div v-else class="less-than-zero">
+                                                    <img src="/img/null.png">
+                                                    <p>空空如也</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--引入共有底部-->
+            <div th:replace="include/footer::footer"></div>
+        </div>
+    </div>
+
+    <div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">回复评论</div>
+            <div class="am-modal-bd">
+                分类名称
+                <input type="text" class="am-modal-prompt-input" id="name">
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>提交</span>
+            </div>
+        </div>
+    </div>
+
+    <!--手机适配显示左侧按钮-->
+    <a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+<script src="js/all.js"></script>
+<script src="js/scroll.js"></script>
+<script src="js/fore/message.js"></script>
+<script>
+    var data4Vue = {
+        item: ''
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body>
+</html>

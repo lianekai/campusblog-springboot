@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:http="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" class="js cssanimations"
+      lang="en">
+<head th:include="include/fore/header::html"></head>
+<link href="css/fore/categories.css" rel="stylesheet">
+<link href="css/fore/tags.css" rel="stylesheet">
+<link href="css/fore/archives.css" rel="stylesheet">
+<body>
+<div th:replace="include/fore/top::html"></div>
+<div id="app">
+    <!--页面主体-->
+    <div id="main" style="width: 60%;">
+        <div class="am-container main-body">
+            <div class="am-g">
+                <div class="site-inner amz-container am-scrollspy-init am-scrollspy-inview am-animation-scale-up"
+                     data-am-scrollspy="{animation: 'scale-up', repeat: false}">
+                    <div>
+                        <div class="categories-title">
+                            <h3 style="font-size: 16px"># 共 {{countAll}} 个标签</h3>
+                        </div>
+                        <div v-if="beans.length>0">
+                            <ul class="tags">
+                                <li v-for="tag in beans">
+                                    <div>
+                                        <a class="tag" :href="'/article_of_tag?tid='+tag.id">
+                                            <span style="display: inline-block; background-color: #fff; width: 10px; height: 10px; border-radius: 5px; border: 1px solid rgba(101,81,65,0.66);"></span>
+                                            {{tag.name}} ({{tag.articleCount}})
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div v-else class="less-than-zero">
+                            <img src="/img/null.png">
+                            <p>空空如也</p>
+                        </div>
+                    </div>
+                    <div v-if="beans.length>0" style="clear: both;"><div th:replace="include/page::html"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--引入共有底部-->
+    <div th:replace="include/footer::footer"></div>
+</div>
+
+<script src="js/all.js"></script>
+<script src="js/scroll.js"></script>
+<script src="js/fore/tags.js"></script>
+<script>
+    var data4Vue = {
+        item: 'tag'
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body></html>

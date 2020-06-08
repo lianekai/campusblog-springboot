@@ -1,0 +1,117 @@
+ <!doctype html>
+<html class="no-js fixed-layout" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml">
+<head th:include="include/fore/header::html"></head>
+<link rel="stylesheet" href="css/fore/home.css">
+<body>
+
+    <!--引入共有头部-->
+    <div th:replace="include/fore/top::html"></div>
+
+    <!--页面主体内容-->
+    <div class="am-cf admin-main" style="padding-top: 0">
+        <!--右侧-->
+        <div id="app">
+            <div id="main">
+                <div th:replace="include/tips::html"></div>
+                <div class="superAdminInfo">
+                    <div class="superFunction" id="userFeedback">
+                        <div class="subject">
+                            <div class="superFunction" id="privateWord">
+                                <div class="subject" style="padding: 20px 40px 0 40px;">
+                                    <form class="am-form">
+                                        <fieldset>
+                                            <legend>个人资料</legend>
+                                            <div class="am-u-sm-8">
+                                                <div class="am-form-group">
+                                                    <label for="doc-ipt-name-1">昵称</label>
+                                                    <input type="email" class="" id="doc-ipt-name-1" placeholder="input your name here" disabled :value="user.username" v-model.trim="user.username">
+                                                </div>
+    
+                                                <div class="am-form-group">
+                                                    <label for="doc-ipt-phone-1">手机</label>
+                                                    <input type="text" class="" id="doc-ipt-phone-1" placeholder="input your phone here" :value="user.phone" v-model.trim="user.phone">
+                                                </div>
+    
+                                                <div class="am-form-group">
+                                                    <label for="doc-ipt-email-1">邮箱</label>
+                                                    <input type="email" class="" id="doc-ipt-email-1" placeholder="input your email here" :value="user.email" v-model.trim="user.email">
+                                                </div>
+
+                                                <div class="am-form-group pub-blog-form">
+                                                    <label class="col-sm-2 am-form-label">性别</label>
+                                                    <select v-model.trim="user.gender">
+                                                        <option value="1">男</option>
+                                                        <option value="2">女</option>
+                                                    </select>
+                                                </div>
+    
+                                                <div class="am-form-group">
+                                                    <label for="doc-datepicker">出生日期</label>
+                                                    <input type="text" class="am-form-field" id="doc-datepicker"/>
+                                                </div>
+    
+                                                <div class="am-form-group">
+                                                    <label for="doc-ta-1">个性签名</label>
+                                                    <textarea class="" rows="5" id="doc-ta-1" :value="user.personalBrief" v-model.trim="user.personalBrief"></textarea>
+                                                </div>
+    
+                                                <div class="am-form-group am-form-file">
+                                                    <label for="doc-ipt-file-2">更换头像</label>
+                                                    <div>
+                                                        <button type="button" class="am-btn am-btn-default am-btn-sm">
+                                                            <i class="am-icon-cloud-upload"></i> Upload File</button>
+                                                    </div>
+                                                    <input type="file" id="doc-ipt-file-2" @change="thisFace($event)">
+                                                </div>
+    
+                                                <hr/>
+    
+                                                <p><button @click.prevent="update" class="am-btn am-btn-default">保存</button></p>
+                                            </div>
+                                            <div class="am-u-sm-4">
+                                                <img :src="file" class="face-img">
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--引入共有底部-->
+            <div th:replace="include/footer::footer"></div>
+        </div>
+    </div>
+
+    <!--手机适配显示左侧按钮-->
+    <a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+<script src="js/all.js"></script>
+<script src="js/scroll.js"></script>
+<script src="js/fore/home.js"></script>
+<script>
+    $(function() {
+        $('#doc-datepicker').datepicker().
+        on('changeDate.datepicker.amui', function(event) {
+            console.log(event.date);
+        });
+    });
+    var data4Vue = {
+        item: ''
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body>
+</html>

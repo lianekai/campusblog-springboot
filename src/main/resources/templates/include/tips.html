@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    <div th:fragment="html" class="am-alert am-animation-scale-up" v-if="show"
+         style="text-align: center; padding: 5px 0; position: fixed; margin: 20px auto 0 -23px; width: 230px; left: 45%; z-index: 999;">
+        <p style="color: #fff;">{{message}}</p>
+    </div>
+</html>

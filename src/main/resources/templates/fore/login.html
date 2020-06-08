@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="include/fore/header::html"></head>
+<link rel="stylesheet" href="css/fore/register.css">
+<body>
+<div th:replace="include/fore/top::html"></div>
+<div id="app">
+    <!--页面主体-->
+    <div id="main">
+        <div th:replace="include/tips::html"></div>
+        <div class="work-space">
+            <p class="top"><a href="/login" class="active">登录</a> <span class="dot">·</span> <a href="/register">注册</a></p>
+            <div class="am-input-group am-input-group-primary" style="width: 300px;">
+                <span class="am-input-group-label" style="font-size: 15px;"><i class="am-icon-user"></i></span>
+                <input type="text" class="am-form-field" placeholder="昵称" v-model.trim="user.username" @keyup.enter="login">
+            </div>
+            <div class="am-input-group am-input-group-primary" style="width: 300px; margin-top: 10px;">
+                <span class="am-input-group-label"><i class="am-icon-lock"></i></span>
+                <input type="password" class="am-form-field" placeholder="密码" v-model.trim="user.password" @keyup.enter="login">
+            </div>
+            <label class="am-checkbox">
+                <input type="checkbox" v-model="rememberMe" value="" data-am-ucheck> 记住我
+            </label>
+            <a class="button" href="#nowhere" @click="login">登录</a>
+        </div>
+    </div>
+    <div th:replace="include/footer::footer"></div>
+</div>
+<script src="js/fore/login.js"></script>
+<script>
+    var data4Vue = {
+        item: ''
+    };
+    //ViewModel
+    var vue = new Vue({
+        el: '#top',
+        data: data4Vue,
+        mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body>
+</html>

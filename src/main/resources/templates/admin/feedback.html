@@ -1,0 +1,60 @@
+<!doctype html>
+<html class="no-js fixed-layout" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml">
+<head th:include="include/admin/header::html"></head>
+<body>
+
+    <!--引入共有头部-->
+    <div th:replace="include/top::header"></div>
+
+    <!--页面主体内容-->
+    <div class="am-cf admin-main" style="padding-top: 0">
+
+        <!--引入共有左侧-->
+        <div th:replace="include/admin/left::html"></div>
+
+        <!--右侧-->
+        <div class="admin-content" id="app">
+            <div class="superAdminInfo">
+                <div class="superFunction" id="userFeedback">
+                    <div class="subject">
+                        <div class="userFeedbackManagement">
+                            <ol class="am-breadcrumb  am-breadcrumb-slash">
+                                <li class="am-active am-icon-home"> 后台管理</li>
+                                <li class="am-active">反馈管理</li>
+                            </ol>
+                            <div class="userFeedbackInfo">
+                                <div class="feedbackInfos  am-animation-slide-right" v-for="f in beans">
+                                    <a href="#nowhere" @click="deleteBean(f.id)" class="am-icon-remove"></a>
+                                    <div class="feedbackInfo">
+                                        <div class="feedbackInfoTitle">
+                                            <span class="feedbackName">{{f.user.username}}</span>
+                                            <span class="feedbackTime">{{f.createdAt | formatDateTimeFilter}}</span>
+                                        </div>
+                                        <div class="feedbackInfoContent">
+                                            <span class="feedbackInfoContentWord">反馈内容：</span>
+                                            {{f.content}}
+                                        </div>
+                                        <div class="feedbackInfoContact">
+                                            <span class="contactInfo">联系方式：</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:replace="include/page::html" ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--引入共有脚部-->
+            <div th:replace="include/admin/footer::html"></div>
+        </div>
+    </div>
+
+
+<script src="js/all.js"></script>
+<script src="js/plugs_paging.js"></script>
+<script src="js/admin/admin_feedback.js"></script>
+
+</body>
+</html>
